@@ -1,0 +1,154 @@
+<!DOCTYPE html> 
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskMage</title>
+</head>
+<body>
+
+  <!-- HTML -->
+  <header>
+    <h1> Gerenciador de tarefas Gamificado</h1>
+    <p>Complete tarefas e evolua seu personagem.</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>✨ Seu personagem</h2>
+      <p id="status">🧙 XP: 0/10 | Nível: 1</p>
+    </div>
+
+    <div class="card">
+      <h2>➕ Nova tarefa</h2>
+      <input type="text" id="inputTarefa" placeholder="Digite sua tarefa...">
+      <button onclick="adicionarTarefa()">Adicionar</button>
+    </div>
+
+    <div class="card">
+      <h2>📋 Suas tarefas</h2>
+      <ul id="listaTarefas"></ul>
+    </div>
+  </main>
+
+  <footer></footer>
+
+  <!-- CSS -->
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #333;
+    }
+
+    header {
+      background: #6a4cff;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    input {
+      padding: 10px;
+      width: 70%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px;
+      border: none;
+      background: #6a4cff;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    li {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .done {
+      text-decoration: line-through;
+      color: gray;
+    }
+  </style>
+
+  <!-- JavaScript -->
+  <script>
+    const lista = document.getElementById("listaTarefas");
+    const status = document.getElementById("status");
+
+    let xp = 0;
+    let nivel = 1;
+    let xpMax = 10;
+
+    function atualizarStatus() {
+      status.innerText = `🧙 XP: ${xp}/${xpMax} | Nível: ${nivel}`;
+    }
+
+    function ganharXP(valor) {
+      xp += valor;
+
+      if (xp >= xpMax) {
+        xp = xp - xpMax;
+        nivel++;
+        xpMax += 10; // cada nível precisa mais XP
+      }
+
+      atualizarStatus();
+    }
+
+    function adicionarTarefa() {
+      const input = document.getElementById("inputTarefa");
+      const texto = input.value.trim();
+
+      if (texto === "") return;
+
+      const li = document.createElement("li");
+
+      const span = document.createElement("span");
+      span.innerText = texto;
+
+      span.onclick = () => {
+        if (!span.classList.contains("done")) {
+          ganharXP(10);
+        }
+        span.classList.toggle("done");
+      };
+
+      const btnRemover = document.createElement("button");
+      btnRemover.innerText = "X";
+      btnRemover.onclick = () => li.remove();
+
+      li.appendChild(span);
+      li.appendChild(btnRemover);
+
+      lista.appendChild(li);
+
+      input.value = "";
+    }
+
+    atualizarStatus();
+  </script>
+
+</body>
+</html>
